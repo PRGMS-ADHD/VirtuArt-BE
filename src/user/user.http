@@ -1,0 +1,33 @@
+### 회원가입
+POST http://localhost:3000/user/create
+content-type: application/json
+
+{
+  "email": "test2@test.com",
+  "password": "1234"
+}
+
+### 유저 조회
+GET http://localhost:3000/user/getUser/test1@test.com
+
+
+### 비밀번호 수정
+PUT http://localhost:3000/user/update/test1@test.com
+content-type: application/json
+
+{
+      "password": "12345"
+}
+
+### 유저 삭제
+DELETE http://localhost:3000/user/delete/test1@test.com
+
+
+### 잘못된 이메일을 입력한 경우
+POST http://localhost:3000/user/create
+content-type: application/json
+
+{
+  "password": "test1234",
+  "email": "andy@podo"
+}

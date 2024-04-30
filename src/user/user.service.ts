@@ -8,8 +8,8 @@ import UpdateUserDto from './updateUser.dto';
 export default class UserService {
   constructor(private userRepository: UserMongoRepository) {}
 
-  createUser(createUserDto: CreateUserDto) {
-    this.userRepository.createUser(createUserDto);
+  createUser(user: CreateUserDto) {
+    return this.userRepository.createUser(user);
   }
 
   async getUser(email: string) {

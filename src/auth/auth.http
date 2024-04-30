@@ -1,0 +1,20 @@
+### 회원가입
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "test3@test.com",
+  "password": "1234"
+}
+
+### 로그인
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "test3@test.com",
+  "password": "1234"
+}
+
+### Guard 테스트
+GET http://localhost:3000/auth/test-guard

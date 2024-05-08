@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ObjectId } from 'mongoose';
 import ArtistService from './artist.service';
 import { CreateArtistDto } from './createArtist.dto';
@@ -12,13 +12,24 @@ export default class ArtistController {
     return this.artistService.getAllArtists();
   }
 
+  @Get('/:id')
+  async getArtistById(@Param('id') id: ObjectId) {
+    return this.artistService.getArtistById(id);
+  }
+
   @Post('/create')
   async createArtist(@Body() artist: CreateArtistDto) {
     return this.artistService.createArtist(artist);
   }
 
   @Delete('/delete/:id')
-  async deleteArtist(@Body() id: ObjectId) {
+  async deleteArtist(@Param('id') id: ObjectId) {
     return this.artistService.deleteArtist(id);
+  }
+
+  // 좋아요
+  @Post('/like/:id')
+  async likeArtist(@Param('id') id: ObjectId) {
+    return this.artistService.likeArtist(id);
   }
 }

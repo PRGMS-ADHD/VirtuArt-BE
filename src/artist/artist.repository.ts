@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { Artist } from './artist.schema';
 import { CreateArtistDto } from './createArtist.dto';
 
@@ -19,5 +19,17 @@ export class ArtistMongoRepository implements ArtistRepository {
   createArtist(artist: CreateArtistDto) {
     const createdArtist = new this.ArtistModel(artist);
     return createdArtist.save();
+  }
+
+  async likeArtist(id: ObjectId) {
+    return this.ArtistModel.findByIdAndUpdate(id, { $inc: { likes: 1 } });
+  }
+
+  deleteArtist(id: ObjectId) {
+    return this.ArtistModel.findByIdAndDelete(id);
+  }
+
+  async getArtistById(id: ObjectId) {
+    return this.ArtistModel.findById(id);
   }
 }

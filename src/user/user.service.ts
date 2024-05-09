@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserMongoRepository } from './user.repository';
 import CreateUserDto from './createUser.dto';
 import { User } from './user.schema';
@@ -12,16 +12,19 @@ export default class UserService {
     return this.userRepository.createUser(user);
   }
 
-  async getUser(email: string) {
+  async getUserInfo(email: string) {
     const result = await this.userRepository.findUserByEmail(email);
+
+    if (!result) {
+      throw new NotFoundException('해당 유저가 존재하지 않습니다.');
+    }
+
     return result;
   }
 
   async updateUser(email: string, _user: UpdateUserDto) {
-    const user: User = await this.getUser(email);
-    console.log(_user);
+    const user: User = await this.getUserInfo(email);
     user.password = _user.password;
-    console.log(user);
     return this.userRepository.updateUser(email, user);
   }
 

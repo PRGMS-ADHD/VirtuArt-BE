@@ -12,7 +12,7 @@ GET http://localhost:3000/user/getUser/test1@test.com
 
 
 ### 비밀번호 수정
-PUT http://localhost:3000/user/update/test1@test.com
+PUT http://localhost:3000/user/update/test3@test.com
 content-type: application/json
 
 {

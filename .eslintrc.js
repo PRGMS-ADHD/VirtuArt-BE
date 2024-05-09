@@ -5,7 +5,13 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin', 'jest', 'prettier', '@typescript-eslint', 'import'],
+  plugins: [
+    '@typescript-eslint/eslint-plugin',
+    'jest',
+    'prettier',
+    '@typescript-eslint',
+    'import',
+  ],
   extends: [
     'airbnb',
     'airbnb-typescript',
@@ -29,5 +35,6 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     'prettier/prettier': ['error'],
     'no-param-reassign': ['error', { props: false }],
+    'no-underscore-dangle': 'off',
   },
 };

@@ -13,18 +13,16 @@ import UpdateUserDto from './updateUser.dto';
 
 @Controller('user')
 export default class UserController {
-  constructor(private userService: UserService) {
-  }
+  constructor(private userService: UserService) {}
 
-  @Post('/create')
+  @Post('/signup')
   createUser(@Body() user: CreateUserDto) {
     return this.userService.createUser(user);
   }
 
-  @Get('/getUser/:email')
+  @Get('/:email')
   async getUser(@Param('email') email: string) {
-    const user = await this.userService.getUser(email);
-    return user;
+    return this.userService.getUserInfo(email);
   }
 
   @Put('/update/:email')

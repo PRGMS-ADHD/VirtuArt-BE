@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
-import AppModule from './app.module';
 import * as cookieParser from 'cookie-parser';
+import AppModule from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,7 +12,7 @@ async function bootstrap() {
   };
 
   app.enableCors(corsOptions);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   app.use(cookieParser());
   await app.listen(3000);

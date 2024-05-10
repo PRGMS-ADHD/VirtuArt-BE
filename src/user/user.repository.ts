@@ -39,4 +39,12 @@ export class UserMongoRepository implements UserRepository {
       email,
     });
   }
+
+  updateUsername(email: string, user: UpdateUserDto) {
+    return this.UserModel.findOneAndUpdate(
+      { email },
+      { username: user.username },
+      { new: true },
+    );
+  }
 }

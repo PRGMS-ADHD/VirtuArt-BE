@@ -11,12 +11,24 @@ export default class AuthGuard implements CanActivate {
   }
 
   private validateRequest(request: any) {
-    const jwtstring = request.headers.authorization.split('Bearer ')[1];
+    try {
+      if (!request.headers.authorization) {
+        throw new Error('인증 토큰이 없습니다.');
+      }
+      const jwtstring = request.headers.authorization.split('Bearer ')[1];
 
-    request.user = this.authService.verify(jwtstring);
+      request.user = this.authService.verify(jwtstring);
 
-    this.authService.verify(jwtstring);
+      this.authService.verify(jwtstring);
 
-    return true;
+      if (request.params.email && request.user.email !== request.param.email) {
+        throw new Error('다른 사용자의 정보에 접근할 수 없습니다.');
+      }
+
+      return true;
+    } catch (e) {
+      console.error(e.message);
+      return false;
+    }
   }
 }

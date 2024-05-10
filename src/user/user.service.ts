@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserMongoRepository } from './user.repository';
 import CreateUserDto from './createUser.dto';
 import { User } from './user.schema';
@@ -30,5 +34,13 @@ export default class UserService {
 
   deleteUser(email: string) {
     return this.userRepository.deleteUser(email);
+  }
+
+  updateUsername(email: string, user: UpdateUserDto) {
+    const { username } = user;
+    if (!username) {
+      throw new BadRequestException('사용하실 닉네임을 입력해주세요.');
+    }
+    return this.userRepository.updateUsername(email, user);
   }
 }

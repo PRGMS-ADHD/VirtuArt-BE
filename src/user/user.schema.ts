@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
+// import { Types } from 'mongoose';
 
 export type UserDocument = User & Document;
 
@@ -26,11 +26,11 @@ export class User {
   @Prop()
   intro?: string;
 
-  @Prop([{ artwork_id: { type: Types.ObjectId, ref: 'Artwork' } }])
-  liked_artworks?: { artwork_id: Types.ObjectId }[];
-
-  @Prop([{ object_id: { type: Types.ObjectId, ref: 'Artist' } }])
-  liked_artist?: { artwork_id: Types.ObjectId }[];
+  // @Prop([{ artwork_id: { type: Types.ObjectId, ref: 'Artwork' } }])
+  // liked_artworks?: { artwork_id: Types.ObjectId }[];
+  //
+  // @Prop([{ object_id: { type: Types.ObjectId, ref: 'Artist' } }])
+  // liked_artist?: { artwork_id: Types.ObjectId }[];
 
   @Prop({ default: Date.now })
   created_at: Date;

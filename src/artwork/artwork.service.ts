@@ -21,4 +21,12 @@ export default class ArtworkService {
   deleteArtwork(id: ObjectId) {
     return this.artworkRepository.deleteArtwork(id);
   }
+
+  async incrementLikes(id: ObjectId) {
+    return this.artworkRepository.incrementLikes(id);
+  }
+
+  async decrementLikes(id: ObjectId) {
+    return this.artworkRepository.decrementLikes(id);
+  }
 }

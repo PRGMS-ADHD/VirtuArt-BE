@@ -6,4 +6,5 @@ export interface CreateArtworkDto {
   collectors?: string[];
   cover_image?: Buffer;
   profile_image?: Buffer;
+  category: string;
 }

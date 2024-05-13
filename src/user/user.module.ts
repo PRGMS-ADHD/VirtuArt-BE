@@ -6,6 +6,7 @@ import UserService from './user.service';
 import { UserSchema } from './user.schema';
 import { UserMongoRepository } from './user.repository';
 import AuthModule from '../auth/auth.module';
+import LikesModule from '../likes/likes.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import AuthModule from '../auth/auth.module';
     }),
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     forwardRef(() => AuthModule),
+    forwardRef(() => LikesModule),
   ],
   controllers: [UserController],
   providers: [UserService, UserMongoRepository],

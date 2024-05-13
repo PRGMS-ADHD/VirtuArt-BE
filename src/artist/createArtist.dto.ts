@@ -8,4 +8,5 @@ export interface CreateArtistDto {
   collectors?: string[];
   cover_image?: Buffer;
   profile_image?: Buffer;
+  category: number;
 }

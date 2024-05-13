@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
-import ArtworkController from './artwork.controller';
-import ArtworkService from './artwork.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import ArtworkController from './artwork.controller';
+import ArtworkService from './artwork.service';
 import { ArtworkSchema } from './artwork.schema';
-import { ArtistMongoRepository } from '../artist/artist.repository';
 import ArtworkMongoRepository from './artwork.repository';
 
 @Module({
@@ -22,4 +21,4 @@ import ArtworkMongoRepository from './artwork.repository';
   providers: [ArtworkService, ArtworkMongoRepository],
   exports: [ArtworkService, ArtworkMongoRepository],
 })
-export class ArtworkModule {}
+export default class ArtworkModule {}

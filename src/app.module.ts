@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import ArtistController from './artist/artist.controller';
 import ArtistService from './artist/artist.service';
 import ArtistModule from './artist/artist.module';
-import { ArtworkModule } from './artwork/artwork.module';
+import ArtworkModule from './artwork/artwork.module';
 import LikesModule from './likes/likes.module';
 import AppController from './app.controller';
 import AppService from './app.service';

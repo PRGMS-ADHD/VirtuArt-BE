@@ -1,29 +1,37 @@
 import {
   BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { UserMongoRepository } from './user.repository';
 import CreateUserDto from './createUser.dto';
-import { User } from './user.schema';
+import { User, UserDocument } from './user.schema';
 import UpdateUserDto from './updateUser.dto';
+import LikesService from '../likes/likes.service';
 
 @Injectable()
 export default class UserService {
-  constructor(private userRepository: UserMongoRepository) {}
+  constructor(
+    private userRepository: UserMongoRepository,
+    @Inject(forwardRef(() => LikesService))
+    private likesService: LikesService,
+  ) {}
 
   createUser(user: CreateUserDto) {
     return this.userRepository.createUser(user);
   }
 
   async getUserInfo(email: string) {
-    const result = await this.userRepository.findUserByEmail(email);
+    const user = await this.userRepository.findUserByEmail(email);
 
-    if (!result) {
+    if (!user) {
       throw new NotFoundException('해당 유저가 존재하지 않습니다.');
     }
 
-    return result;
+    const likedArtists = await this.likesService.getUserLikedArtists(email);
+    return { ...user.toObject(), likedArtists };
   }
 
   async updateUser(email: string, _user: UpdateUserDto) {
@@ -42,5 +50,15 @@ export default class UserService {
       throw new BadRequestException('사용하실 닉네임을 입력해주세요.');
     }
     return this.userRepository.updateUsername(email, user);
+  }
+
+  async getUserByEmail(email: string): Promise<UserDocument> {
+    const user = await this.userRepository.findUserByEmail(email);
+
+    if (!user) {
+      throw new NotFoundException('해당 유저가 존재하지 않습니다.');
+    }
+
+    return user;
   }
 }

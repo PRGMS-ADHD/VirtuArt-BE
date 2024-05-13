@@ -2,10 +2,14 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ObjectId } from 'mongoose';
 import ArtistService from './artist.service';
 import { CreateArtistDto } from './createArtist.dto';
+import LikesService from '../likes/likes.service';
 
 @Controller('artist')
 export default class ArtistController {
-  constructor(private artistService: ArtistService) {}
+  constructor(
+    private artistService: ArtistService,
+    private likesService: LikesService,
+  ) {}
 
   @Get('/all')
   async getAllArtists() {
@@ -25,11 +29,5 @@ export default class ArtistController {
   @Delete('/delete/:id')
   async deleteArtist(@Param('id') id: ObjectId) {
     return this.artistService.deleteArtist(id);
-  }
-
-  // 좋아요
-  @Post('/like/:id')
-  async likeArtist(@Param('id') id: ObjectId) {
-    return this.artistService.likeArtist(id);
   }
 }

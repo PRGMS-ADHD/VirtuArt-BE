@@ -2,10 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { ObjectId } from 'mongoose';
 import { ArtistMongoRepository } from './artist.repository';
 import { CreateArtistDto } from './createArtist.dto';
+import LikesService from '../likes/likes.service';
 
 @Injectable()
 export default class ArtistService {
-  constructor(private artistRepository: ArtistMongoRepository) {}
+  constructor(
+    private artistRepository: ArtistMongoRepository,
+    private likesService: LikesService,
+  ) {}
 
   async getAllArtists() {
     return this.artistRepository.getAllArtists();
@@ -19,11 +23,17 @@ export default class ArtistService {
     return this.artistRepository.deleteArtist(id);
   }
 
-  async likeArtist(id: ObjectId) {
-    return this.artistRepository.likeArtist(id);
+  async getArtistById(id: ObjectId) {
+    const artist = await this.artistRepository.getArtistById(id);
+    const collectors = await this.likesService.getArtistLikers(id);
+    return { ...artist.toObject(), collectors };
   }
 
-  async getArtistById(id: ObjectId) {
-    return this.artistRepository.getArtistById(id);
+  async incrementLikes(id: ObjectId) {
+    return this.artistRepository.incrementLikes(id);
+  }
+
+  async decrementLikes(id: ObjectId) {
+    return this.artistRepository.decrementLikes(id);
   }
 }

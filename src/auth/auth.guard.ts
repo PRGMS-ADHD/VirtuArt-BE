@@ -21,7 +21,8 @@ export default class AuthGuard implements CanActivate {
 
       this.authService.verify(jwtstring);
 
-      if (request.params.email && request.user.email !== request.param.email) {
+      if (request.params.email && request.user.email !== request.params.email) {
+        console.log(request.user.email, request.params.email);
         throw new Error('다른 사용자의 정보에 접근할 수 없습니다.');
       }
 

@@ -1,14 +1,15 @@
-import { Prop, Schema } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ObjectId, Types, Document } from 'mongoose';
 
 export type LikesDocument = Likes & Document;
 
 @Schema({ collection: 'likes' })
 export class Likes {
   @Prop()
-  user_id: string;
+  email: string;
 
-  @Prop()
-  target_id: string;
+  @Prop({ type: Types.ObjectId })
+  target_id: ObjectId;
 
   @Prop()
   target_type: string;
@@ -16,3 +17,5 @@ export class Likes {
   @Prop()
   created_at: Date;
 }
+
+export const LikesSchema = SchemaFactory.createForClass(Likes);

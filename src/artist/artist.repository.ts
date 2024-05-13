@@ -21,15 +21,19 @@ export class ArtistMongoRepository implements ArtistRepository {
     return createdArtist.save();
   }
 
-  async likeArtist(id: ObjectId) {
-    return this.ArtistModel.findByIdAndUpdate(id, { $inc: { likes: 1 } });
-  }
-
   deleteArtist(id: ObjectId) {
     return this.ArtistModel.findByIdAndDelete(id);
   }
 
   async getArtistById(id: ObjectId) {
     return this.ArtistModel.findById(id);
+  }
+
+  incrementLikes(id: ObjectId) {
+    return this.ArtistModel.findByIdAndUpdate(id, { $inc: { likes: 1 } });
+  }
+
+  decrementLikes(id: ObjectId) {
+    return this.ArtistModel.findByIdAndUpdate(id, { $inc: { likes: -1 } });
   }
 }

@@ -11,7 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import CreateUserDto from '../user/createUser.dto';
 import UserService from '../user/user.service';
 import { JwtPayload } from './jwtPayload.interface';
-import { User, UserDocument } from '../user/user.schema';
+import { UserDocument } from '../user/user.schema';
 
 @Injectable()
 export default class AuthService {

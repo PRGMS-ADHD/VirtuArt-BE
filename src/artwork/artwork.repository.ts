@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Artwork } from './artwork.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
+import { Artwork, ArtworkDocument } from './artwork.schema';
 
 interface ArtworkRepository {
   getArtworkById(id: ObjectId): Promise<any>;
@@ -13,7 +13,7 @@ export default class ArtworkMongoRepository implements ArtworkRepository {
     @InjectModel(Artwork.name) private ArtworkModel: Model<Artwork>,
   ) {}
 
-  async getArtworkById(id: ObjectId): Promise<any> {
+  async getArtworkById(id: ObjectId): Promise<ArtworkDocument> {
     return this.ArtworkModel.findById(id);
   }
 
@@ -31,5 +31,13 @@ export default class ArtworkMongoRepository implements ArtworkRepository {
 
   deleteArtwork(id: ObjectId) {
     return this.ArtworkModel.findByIdAndDelete(id);
+  }
+
+  incrementLikes(id: ObjectId) {
+    return this.ArtworkModel.findByIdAndUpdate(id, { $inc: { likes: 1 } });
+  }
+
+  decrementLikes(id: ObjectId) {
+    return this.ArtworkModel.findByIdAndUpdate(id, { $inc: { likes: -1 } });
   }
 }

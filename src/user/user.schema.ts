@@ -5,8 +5,8 @@ export type UserDocument = User & Document;
 
 @Schema({ collection: 'users' })
 export class User {
-  @Prop({ type: Types.ObjectId })
-  _id?: ObjectId;
+  // @Prop({ type: Types.ObjectId, auto: true })
+  // _id?: ObjectId;
 
   @Prop({ required: true })
   email: string;

@@ -45,6 +45,7 @@ export default class AuthService {
       newUser.password = undefined;
       return newUser;
     } catch (error) {
+      console.error(error);
       throw new HttpException('서버 에러', 500);
     }
   }

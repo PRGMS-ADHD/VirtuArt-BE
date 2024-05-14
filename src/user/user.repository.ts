@@ -17,9 +17,9 @@ export interface UserRepository {
 
 @Injectable()
 export class UserMongoRepository implements UserRepository {
-  constructor(@InjectModel(User.name) private UserModel: Model<User>) {}
+  constructor(@InjectModel(User.name) private UserModel: Model<UserDocument>) {}
 
-  createUser(createUserDto: CreateUserDto): Promise<CreateUserDto> {
+  createUser(createUserDto: CreateUserDto): Promise<UserDocument> {
     const createdUser = new this.UserModel(createUserDto);
     return createdUser.save();
   }

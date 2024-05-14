@@ -20,28 +20,22 @@ export class User {
   @Prop({ default: 0 })
   likes?: number;
 
-  @Prop()
+  @Prop({ default: '' })
   instagram?: string;
 
-  @Prop()
+  @Prop({ default: '' })
   location?: string;
 
-  @Prop()
+  @Prop({ default: '' })
   intro?: string;
-
-  // @Prop([{ artwork_id: { type: Types.ObjectId, ref: 'Artwork' } }])
-  // liked_artworks?: { artwork_id: Types.ObjectId }[];
-  //
-  // @Prop([{ object_id: { type: Types.ObjectId, ref: 'Artist' } }])
-  // liked_artist?: { artwork_id: Types.ObjectId }[];
 
   @Prop({ default: Date.now })
   created_at: Date;
 
-  @Prop()
+  @Prop({ default: Buffer.from('') })
   cover_image?: Buffer;
 
-  @Prop()
+  @Prop({ default: Buffer.from('') })
   profile_image?: Buffer;
 }
 

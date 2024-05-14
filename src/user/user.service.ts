@@ -23,6 +23,11 @@ export default class UserService {
     return this.userRepository.createUser(user);
   }
 
+  async checkUserExist(email: string) {
+    const user = await this.userRepository.findUserByEmail(email);
+    return !!user;
+  }
+
   async getUserInfo(email: string) {
     const user = await this.userRepository.findUserByEmail(email);
 

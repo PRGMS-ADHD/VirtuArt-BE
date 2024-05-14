@@ -26,7 +26,7 @@ export default class AuthService {
   }
 
   async register(userDto: CreateUserDto) {
-    const user = await this.userService.getUserInfo(userDto.email);
+    const user = await this.userService.checkUserExist(userDto.email);
 
     if (user) {
       throw new HttpException(

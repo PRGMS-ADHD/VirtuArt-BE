@@ -2,14 +2,10 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ObjectId } from 'mongoose';
 import ArtistService from './artist.service';
 import { CreateArtistDto } from './createArtist.dto';
-import LikesService from '../likes/likes.service';
 
 @Controller('artist')
 export default class ArtistController {
-  constructor(
-    private artistService: ArtistService,
-    private likesService: LikesService,
-  ) {}
+  constructor(private artistService: ArtistService) {}
 
   @Get('/all')
   async getAllArtists() {

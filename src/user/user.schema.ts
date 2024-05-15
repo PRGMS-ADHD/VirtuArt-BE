@@ -32,11 +32,11 @@ export class User {
   @Prop({ default: Date.now })
   created_at: Date;
 
-  @Prop({ default: Buffer.from('') })
-  cover_image?: Buffer;
+  @Prop({ default: '' })
+  cover_image?: string; // 경로를 저장
 
-  @Prop({ default: Buffer.from('') })
-  profile_image?: Buffer;
+  @Prop({ default: '' })
+  profile_image?: string; // 경로를 저장
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

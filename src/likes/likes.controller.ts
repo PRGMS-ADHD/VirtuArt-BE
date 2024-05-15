@@ -22,7 +22,6 @@ export default class LikesController {
     @Param('target_type') targetType: string,
     @Param('target_id') targetId: ObjectId,
   ): Promise<boolean> {
-    console.log('req.user', req.user);
     const { email } = req.user;
     return this.likesService.toggleLike(email, targetType, targetId);
   }

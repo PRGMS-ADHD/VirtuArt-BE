@@ -97,4 +97,25 @@ export default class LikesService {
 
     return likers;
   }
+
+  async getArtworkLikers(
+    targetId: ObjectId,
+  ): Promise<{ _id: ObjectId; username: string }[]> {
+    const likes = await this.likesModel
+      .find({ target_id: targetId, target_type: 'artwork' })
+      .select('email')
+      .exec();
+
+    const likers = await Promise.all(
+      likes.map(async (like) => {
+        const user = await this.userService.getUserByEmail(like.email);
+        return {
+          _id: user._id,
+          username: user.username,
+        };
+      }),
+    );
+
+    return likers;
+  }
 }

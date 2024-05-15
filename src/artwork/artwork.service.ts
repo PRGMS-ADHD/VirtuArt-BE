@@ -1,13 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { ObjectId } from 'mongoose';
-import ArtworkRepository from './artwork.repository';
+import LikesService from '../likes/likes.service';
+import ArtworkMongoRepository from './artwork.repository';
 
 @Injectable()
 export default class ArtworkService {
-  constructor(private artworkRepository: ArtworkRepository) {}
+  constructor(
+    private artworkRepository: ArtworkMongoRepository,
+    @Inject(forwardRef(() => LikesService))
+    private likesService: LikesService,
+  ) {}
 
-  getArtworkById(id: ObjectId) {
-    return this.artworkRepository.getArtworkById(id);
+  async getArtworkById(id: ObjectId) {
+    const artwork = await this.artworkRepository.getArtworkById(id);
+    const collector = await this.likesService.getArtworkLikers(id);
+    return { ...artwork.toObject(), collector };
   }
 
   createArtwork() {

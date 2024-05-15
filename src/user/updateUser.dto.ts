@@ -1,4 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export default class UpdateUserDto {
   @IsString()
@@ -7,4 +8,12 @@ export default class UpdateUserDto {
   @IsOptional()
   @IsString()
   password?: string;
+
+  @IsOptional()
+  @IsString()
+  cover_image?: string;
+
+  @IsOptional()
+  @IsString()
+  profile_image?: string;
 }

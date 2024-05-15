@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import ArtworkController from './artwork.controller';
 import ArtworkService from './artwork.service';
 import { ArtworkSchema } from './artwork.schema';
 import ArtworkMongoRepository from './artwork.repository';
+import LikesModule from '../likes/likes.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import ArtworkMongoRepository from './artwork.repository';
       inject: [ConfigService],
     }),
     MongooseModule.forFeature([{ name: 'Artwork', schema: ArtworkSchema }]),
+    forwardRef(() => LikesModule),
   ],
   controllers: [ArtworkController],
   providers: [ArtworkService, ArtworkMongoRepository],

@@ -11,16 +11,22 @@ export class Artwork {
   @Prop({ default: '' })
   name: string;
 
+  @Prop({ default: '' })
+  e_name: string;
+
   @Prop({ default: 0 })
   likes?: number;
 
-  @Prop()
+  @Prop({ default: '' })
   description?: string;
 
-  @Prop()
+  @Prop({ default: '' })
+  intro?: string;
+
+  @Prop({ default: '' })
   tags?: string[];
 
-  @Prop()
+  @Prop({ default: '' })
   image?: string;
 
   @Prop({ default: '' })

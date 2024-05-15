@@ -5,6 +5,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import * as fs from 'fs-extra';
+import * as path from 'path';
 import { UserMongoRepository } from './user.repository';
 import CreateUserDto from './createUser.dto';
 import { User, UserDocument } from './user.schema';
@@ -65,5 +67,32 @@ export default class UserService {
     }
 
     return user;
+  }
+
+  async updateCoverImage(email: string, coverImage: Buffer) {
+    const imagePath = UserService.saveImage(coverImage, 'cover', email);
+    return this.userRepository.updateCoverImage(email, imagePath);
+  }
+
+  async updateProfileImage(email: string, profileImage: Buffer) {
+    const imagePath = UserService.saveImage(profileImage, 'profile', email);
+    return this.userRepository.updateProfileImage(email, imagePath);
+  }
+
+  private static saveImage(
+    imageBuffer: Buffer,
+    type: string,
+    email: string,
+  ): string {
+    const imagePath = path.join(
+      __dirname,
+      '..',
+      'uploads',
+      type,
+      `${email}.jpg`,
+    );
+    fs.ensureDirSync(path.dirname(imagePath));
+    fs.writeFileSync(imagePath, imageBuffer);
+    return imagePath;
   }
 }

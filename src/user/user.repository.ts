@@ -47,4 +47,26 @@ export class UserMongoRepository implements UserRepository {
       { new: true },
     );
   }
+
+  async updateCoverImage(
+    email: string,
+    coverImagePath: string,
+  ): Promise<UserDocument> {
+    return this.UserModel.findOneAndUpdate(
+      { email },
+      { cover_image: coverImagePath },
+      { new: true },
+    );
+  }
+
+  async updateProfileImage(
+    email: string,
+    profileImagePath: string,
+  ): Promise<UserDocument> {
+    return this.UserModel.findOneAndUpdate(
+      { email },
+      { profile_image: profileImagePath },
+      { new: true },
+    );
+  }
 }

@@ -13,7 +13,7 @@ export default class ArtworkMongoRepository implements ArtworkRepository {
     @InjectModel(Artwork.name) private ArtworkModel: Model<Artwork>,
   ) {}
 
-  async getArtworkById(id: ObjectId): Promise<ArtworkDocument> {
+  async getArtworkById(id: ObjectId): Promise<any> {
     return this.ArtworkModel.findById(id);
   }
 

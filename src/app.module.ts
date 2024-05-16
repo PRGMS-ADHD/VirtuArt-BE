@@ -12,9 +12,12 @@ import AuthModule from './auth/auth.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: `.env.${process.env.NODE_ENV}`,
+      isGlobal: true,
+    }),
     UserModule,
     AuthModule,
-    ConfigModule.forRoot(),
     ArtistModule,
     ArtworkModule,
     LikesModule,

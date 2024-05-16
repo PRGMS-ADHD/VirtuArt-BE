@@ -15,7 +15,7 @@ export class User {
   password: string;
 
   @Prop({ default: '' })
-  username: string;
+  username?: string;
 
   @Prop({ default: 0 })
   likes?: number;

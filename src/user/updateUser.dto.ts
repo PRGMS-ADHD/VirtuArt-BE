@@ -1,9 +1,21 @@
 import { IsOptional, IsString } from 'class-validator';
-import { Type } from 'class-transformer';
 
 export default class UpdateUserDto {
   @IsString()
+  @IsOptional()
   readonly username?: string;
+
+  @IsOptional()
+  @IsString()
+  readonly location?: string;
+
+  @IsOptional()
+  @IsString()
+  readonly intro?: string;
+
+  @IsOptional()
+  @IsString()
+  readonly instagram?: string;
 
   @IsOptional()
   @IsString()

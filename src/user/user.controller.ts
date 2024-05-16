@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Res,
@@ -95,5 +96,14 @@ export default class UserController {
     } else {
       res.status(404).send('Cover image not found');
     }
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch('/profile/:email')
+  async updateUserProfile(
+    @Param('email') email: string,
+    @Body() profileDto: UpdateUserDto,
+  ) {
+    return this.userService.updateUserProfile(email, profileDto);
   }
 }

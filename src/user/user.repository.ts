@@ -30,7 +30,7 @@ export class UserMongoRepository implements UserRepository {
     });
   }
 
-  async updateUser(email: string, user: User): Promise<UpdateUserDto> {
+  async updateUser(email: string, user: UpdateUserDto): Promise<UserDocument> {
     return this.UserModel.findOneAndUpdate({ email }, user, { new: true });
   }
 

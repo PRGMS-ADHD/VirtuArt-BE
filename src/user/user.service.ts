@@ -95,4 +95,22 @@ export default class UserService {
     fs.writeFileSync(imagePath, imageBuffer);
     return imagePath;
   }
+
+  async updateUserProfile(email: string, profileDto: UpdateUserDto) {
+    const user = await this.getUserByEmail(email);
+
+    if (!user) {
+      throw new NotFoundException('해당 유저가 존재하지 않습니다.');
+    }
+
+    // 입력된 필드만 업데이트하고 나머지는 기존 값을 유지
+    const updatedUser = {
+      username: profileDto.username ?? user.username,
+      location: profileDto.location ?? user.location,
+      intro: profileDto.intro ?? user.intro,
+      instagram: profileDto.instagram ?? user.instagram,
+    };
+
+    return this.userRepository.updateUser(email, updatedUser);
+  }
 }

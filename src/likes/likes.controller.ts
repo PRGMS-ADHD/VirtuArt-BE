@@ -4,7 +4,6 @@ import {
   Post,
   UseGuards,
   Request,
-  Delete,
   Get,
 } from '@nestjs/common';
 import { ObjectId } from 'mongoose';
@@ -35,5 +34,10 @@ export default class LikesController {
   @Get('/artist/:id/collectors')
   async getArtistLikers(@Param('id') id: ObjectId) {
     return this.likesService.getArtistLikers(id);
+  }
+
+  @Get('/artwork/:id/collectors')
+  async getArtworkLikers(@Param('id') id: ObjectId) {
+    return this.likesService.getArtworkLikers(id);
   }
 }

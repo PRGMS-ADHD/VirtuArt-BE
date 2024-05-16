@@ -30,7 +30,7 @@ export default class UserController {
 
   @Get('/:email')
   async getUser(@Param('email') email: string) {
-    return this.userService.getUserInfo(email);
+    return this.userService.getUserPublicInfo(email);
   }
 
   @Put('/update/:email')

@@ -7,11 +7,13 @@ import {
 } from '@nestjs/common';
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import { plainToClass } from 'class-transformer';
 import { UserMongoRepository } from './user.repository';
 import CreateUserDto from './createUser.dto';
 import { User, UserDocument } from './user.schema';
 import UpdateUserDto from './updateUser.dto';
 import LikesService from '../likes/likes.service';
+import UserInfoDto from './userInfo.dto';
 
 @Injectable()
 export default class UserService {
@@ -112,5 +114,17 @@ export default class UserService {
     };
 
     return this.userRepository.updateUser(email, updatedUser);
+  }
+
+  async getUserPublicInfo(email: string): Promise<UserInfoDto> {
+    const user = await this.getUserInfo(email);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // 비밀번호 제거
+    const { password, ...userInfo } = user;
+
+    return plainToClass(UserInfoDto, userInfo);
   }
 }

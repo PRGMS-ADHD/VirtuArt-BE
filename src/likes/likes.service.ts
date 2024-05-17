@@ -2,8 +2,11 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { Likes, LikesDocument } from './likes.schema';
+// eslint-disable-next-line import/no-cycle
 import ArtistService from '../artist/artist.service';
+// eslint-disable-next-line import/no-cycle
 import ArtworkService from '../artwork/artwork.service';
+// eslint-disable-next-line import/no-cycle
 import UserService from '../user/user.service';
 
 @Injectable()
@@ -117,5 +120,27 @@ export default class LikesService {
     );
 
     return likers;
+  }
+
+  async getUserLikedArtworks(email: string) {
+    const likes = await this.likesModel
+      .find({ email, target_type: 'artwork' })
+      .select('target_id')
+      .exec();
+
+    const likedArtworks = await Promise.all(
+      likes.map(async (like) => {
+        const artwork = await this.artworkService.getArtworkById(
+          like.target_id,
+        );
+        return {
+          _id: artwork._id,
+          name: artwork.name,
+          profile_image: artwork.profile_image,
+        };
+      }),
+    );
+
+    return likedArtworks;
   }
 }

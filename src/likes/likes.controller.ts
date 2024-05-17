@@ -31,6 +31,12 @@ export default class LikesController {
     return this.likesService.getUserLikedArtists(email);
   }
 
+  @Get('/user/artworks')
+  async getUserLikedArtworks(@Request() req) {
+    const { email } = req.user;
+    return this.likesService.getUserLikedArtworks(email);
+  }
+
   @Get('/artist/:id/collectors')
   async getArtistLikers(@Param('id') id: ObjectId) {
     return this.likesService.getArtistLikers(id);

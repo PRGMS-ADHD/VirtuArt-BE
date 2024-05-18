@@ -55,6 +55,8 @@ export default class LikesService {
       await this.artistService.incrementLikes(targetId);
     } else if (targetType === 'artwork') {
       await this.artworkService.incrementLikes(targetId);
+    } else {
+      throw new Error('Invalid target type');
     }
 
     return true;

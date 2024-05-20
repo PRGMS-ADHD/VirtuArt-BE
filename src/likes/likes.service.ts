@@ -137,6 +137,7 @@ export default class LikesService {
         );
         return {
           _id: artwork._id,
+          artist: artwork.artist,
           name: artwork.name,
           image: artwork.image,
         };

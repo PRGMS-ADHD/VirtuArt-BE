@@ -125,25 +125,39 @@ export default class LikesService {
   }
 
   async getUserLikedArtworks(email: string) {
-    const likes = await this.likesModel
-      .find({ email, target_type: 'artwork' })
-      .select('target_id')
-      .exec();
+    console.log('getUserLikedArtworks called with email:', email);
 
-    const likedArtworks = await Promise.all(
-      likes.map(async (like) => {
-        const artwork = await this.artworkService.getArtworkById(
-          like.target_id,
-        );
-        return {
-          _id: artwork._id,
-          artist: artwork.artist,
-          name: artwork.name,
-          image: artwork.image,
-        };
-      }),
-    );
+    try {
+      const likes = await this.likesModel
+        .find({ email, target_type: 'artwork' })
+        .select('target_id')
+        .exec();
 
-    return likedArtworks;
+      const likedArtworks = await Promise.all(
+        likes.map(async (like) => {
+          try {
+            const artwork = await this.artworkService.getArtworkById(
+              like.target_id,
+            );
+            return {
+              _id: artwork._id,
+              artist: artwork.artist,
+              name: artwork.name,
+              image: artwork.image,
+            };
+          } catch (error) {
+            console.error(
+              `Error fetching artwork for ID ${like.target_id}: ${error.message}`,
+            );
+            return null;
+          }
+        }),
+      );
+
+      return likedArtworks.filter((artwork) => artwork !== null);
+    } catch (error) {
+      console.error(`Error in getUserLikedArtworks: ${error.message}`);
+      throw error; // rethrow the error after logging it
+    }
   }
 }

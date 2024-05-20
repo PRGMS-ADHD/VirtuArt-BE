@@ -138,7 +138,7 @@ export default class LikesService {
         return {
           _id: artwork._id,
           name: artwork.name,
-          profile_image: artwork.profile_image,
+          image: artwork.image,
         };
       }),
     );

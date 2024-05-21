@@ -25,4 +25,9 @@ export default class ArtworkController {
   async deleteArtwork(@Param('id') id: ObjectId) {
     return this.artworkService.deleteArtwork(id);
   }
+
+  @Get('by-artist/:artist')
+  async getArtworkByArtist(@Param('artist') artistId: string) {
+    return this.artworkService.getArtworkByArtist(artistId);
+  }
 }

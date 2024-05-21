@@ -40,4 +40,8 @@ export default class ArtworkMongoRepository implements ArtworkRepository {
   decrementLikes(id: ObjectId) {
     return this.ArtworkModel.findByIdAndUpdate(id, { $inc: { likes: -1 } });
   }
+
+  async findByArtist(artistId: string): Promise<Artwork[]> {
+    return this.ArtworkModel.find({ artist_id: artistId }).exec();
+  }
 }

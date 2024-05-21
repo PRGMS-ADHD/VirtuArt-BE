@@ -36,4 +36,8 @@ export default class ArtworkService {
   async decrementLikes(id: ObjectId) {
     return this.artworkRepository.decrementLikes(id);
   }
+
+  async getArtworkByArtist(artistId: string) {
+    return this.artworkRepository.findByArtist(artistId);
+  }
 }

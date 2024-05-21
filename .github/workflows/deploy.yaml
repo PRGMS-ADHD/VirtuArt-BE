@@ -53,8 +53,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd /home/ubuntu/VirtuArt-BE
             git pull origin main
-            echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> .env.production
-            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.production
-            echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env.production
-            echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env.production
-            echo "AWS_REGION=${{ secre
+            npm install
+            npm run build
+            pm2 restart all
+          EOF

@@ -13,29 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '20.11.1'
-
-      - name: Create .env.production file
-        run: |
-          echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> .env.production
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.production
-          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env.production
-          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env.production
-          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> .env.production
-          echo "AWS_S3_BUCKET=${{ secrets.AWS_S3_BUCKET }}" >> .env.production
-          echo "CORS_OPTION=${{ secrets.CORS_OPTION }}" >> .env.production
-          echo "APP_PORT=${{ secrets.APP_PORT }}" >> .env.production
-          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env.production
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build the project
-        run: npm run build
-
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
@@ -45,13 +22,24 @@ jobs:
         run: |
           ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Copy files to server
-        run: scp -r dist package.json package-lock.json .env.production ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/home/ubuntu/VirtuArt-BE
+      - name: Copy .env.production to server
+        run: scp .env.production ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/home/ubuntu/VirtuArt-BE
 
       - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd /home/ubuntu/VirtuArt-BE
+            git pull origin main
+            echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> .env.production
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.production
+            echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env.production
+            echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env.production
+            echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> .env.production
+            echo "AWS_S3_BUCKET=${{ secrets.AWS_S3_BUCKET }}" >> .env.production
+            echo "CORS_OPTION=${{ secrets.CORS_OPTION }}" >> .env.production
+            echo "APP_PORT=${{ secrets.APP_PORT }}" >> .env.production
+            echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env.production
             npm install
+            npm run build
             pm2 restart all
           EOF

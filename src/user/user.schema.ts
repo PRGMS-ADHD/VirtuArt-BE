@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ObjectId, Types, Document } from 'mongoose';
+import { Document } from 'mongoose';
 
 export type UserDocument = User & Document;
 
@@ -32,10 +32,12 @@ export class User {
   @Prop({ default: Date.now })
   created_at: Date;
 
-  @Prop({ default: '' })
+  @Prop({
+    default: 'https://dgz50u1nq28v1.cloudfront.net/user/default_cover2.jpeg',
+  })
   cover_image?: string; // 경로를 저장
 
-  @Prop({ default: '' })
+  @Prop({ default: 'https://dgz50u1nq28v1.cloudfront.net/user/default_user' })
   profile_image?: string; // 경로를 저장
 }
 

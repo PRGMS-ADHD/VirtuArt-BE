@@ -96,6 +96,7 @@ export default class LikesService {
         return {
           _id: user._id,
           username: user.username,
+          profile_image: user.profile_image,
         };
       }),
     );
@@ -117,6 +118,7 @@ export default class LikesService {
         return {
           _id: user._id,
           username: user.username,
+          profile_image: user.profile_image,
         };
       }),
     );

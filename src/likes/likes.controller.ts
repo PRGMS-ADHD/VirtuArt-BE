@@ -11,10 +11,10 @@ import LikesService from './likes.service';
 import AuthGuard from '../auth/auth.guard';
 
 @Controller('likes')
+@UseGuards(AuthGuard)
 export default class LikesController {
   constructor(private likesService: LikesService) {}
 
-  @UseGuards(AuthGuard)
   @Post(':target_type/:target_id')
   async toggleLike(
     @Request() req,
@@ -25,13 +25,15 @@ export default class LikesController {
     return this.likesService.toggleLike(email, targetType, targetId);
   }
 
-  @Get('/user/:email/artists')
-  async getUserLikedArtists(@Param('email') email: string) {
+  @Get('/user/artists')
+  async getUserLikedArtists(@Request() req) {
+    const { email } = req.user;
     return this.likesService.getUserLikedArtists(email);
   }
 
-  @Get('/user/:email/artworks')
-  async getUserLikedArtworks(@Param('email') email: string) {
+  @Get('/user/artworks')
+  async getUserLikedArtworks(@Request() req) {
+    const { email } = req.user;
     return this.likesService.getUserLikedArtworks(email);
   }
 

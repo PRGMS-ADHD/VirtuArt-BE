@@ -127,8 +127,6 @@ export default class LikesService {
   }
 
   async getUserLikedArtworks(email: string) {
-    console.log('getUserLikedArtworks called with email:', email);
-
     try {
       const likes = await this.likesModel
         .find({ email, target_type: 'artwork' })

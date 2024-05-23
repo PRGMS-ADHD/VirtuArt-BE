@@ -53,46 +53,38 @@ export default class UserController {
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('cover_image'))
   @Put('/upload/cover/:email')
-  uploadCoverImage(
+  async uploadCoverImage(
     @Param('email') email: string,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.userService.updateCoverImage(email, file.buffer);
+    return this.userService.updateCoverImage(email, file);
   }
 
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('profile_image'))
   @Put('/upload/profile/:email')
-  uploadProfileImage(
+  async uploadProfileImage(
     @Param('email') email: string,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.userService.updateProfileImage(email, file.buffer);
+    return this.userService.updateProfileImage(email, file);
   }
 
-  // 프로필 이미지 가져오기
   @Get('/profile/:email')
   async getProfileImage(@Param('email') email: string, @Res() res) {
     const user = await this.userService.getUserByEmail(email);
     if (user.profile_image) {
-      const imagePath = user.profile_image;
-      const image = fs.readFileSync(imagePath);
-      res.set('Content-Type', 'image/jpeg');
-      res.send(image);
+      res.redirect(user.profile_image);
     } else {
       res.status(404).send('Profile image not found');
     }
   }
 
-  // 커버 이미지 가져오기
   @Get('/cover/:email')
   async getCoverImage(@Param('email') email: string, @Res() res) {
     const user = await this.userService.getUserByEmail(email);
     if (user.cover_image) {
-      const imagePath = user.cover_image;
-      const image = fs.readFileSync(imagePath);
-      res.set('Content-Type', 'image/jpeg');
-      res.send(image);
+      res.redirect(user.cover_image);
     } else {
       res.status(404).send('Cover image not found');
     }

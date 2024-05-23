@@ -8,6 +8,8 @@ import {
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { plainToClass } from 'class-transformer';
+import { ConfigService } from '@nestjs/config';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { UserMongoRepository } from './user.repository';
 import CreateUserDto from './createUser.dto';
 import { User, UserDocument } from './user.schema';
@@ -17,11 +19,45 @@ import UserInfoDto from './userInfo.dto';
 
 @Injectable()
 export default class UserService {
+  private readonly s3Client: S3Client;
+
+  private readonly bucketName: string;
+
   constructor(
     private userRepository: UserMongoRepository,
+    private configService: ConfigService,
     @Inject(forwardRef(() => LikesService))
     private likesService: LikesService,
-  ) {}
+  ) {
+    this.s3Client = new S3Client({
+      region: this.configService.get<string>('AWS_REGION'),
+      credentials: {
+        accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID'),
+        secretAccessKey: this.configService.get<string>(
+          'AWS_SECRET_ACCESS_KEY',
+        ),
+      },
+    });
+    this.bucketName = this.configService.get<string>('AWS_S3_BUCKET');
+  }
+
+  async uploadImageToS3(
+    file: Express.Multer.File,
+    type: 'profile' | 'cover',
+    email: string,
+  ): Promise<string> {
+    const keyPrefix = type === 'profile' ? 'profile/' : 'cover/';
+    const params = {
+      Bucket: this.bucketName,
+      Key: `${keyPrefix}${email}-${Date.now()}-${file.originalname}`,
+      Body: file.buffer,
+      ContentType: file.mimetype,
+    };
+
+    const command = new PutObjectCommand(params);
+    await this.s3Client.send(command);
+    return `https://${this.bucketName}.s3.${this.configService.get<string>('AWS_REGION')}.amazonaws.com/${params.Key}`;
+  }
 
   createUser(user: CreateUserDto) {
     return this.userRepository.createUser(user);
@@ -71,14 +107,14 @@ export default class UserService {
     return user;
   }
 
-  async updateCoverImage(email: string, coverImage: Buffer) {
-    const imagePath = UserService.saveImage(coverImage, 'cover', email);
-    return this.userRepository.updateCoverImage(email, imagePath);
+  async updateCoverImage(email: string, file: Express.Multer.File) {
+    const imageUrl = await this.uploadImageToS3(file, 'cover', email);
+    return this.userRepository.updateCoverImage(email, imageUrl);
   }
 
-  async updateProfileImage(email: string, profileImage: Buffer) {
-    const imagePath = UserService.saveImage(profileImage, 'profile', email);
-    return this.userRepository.updateProfileImage(email, imagePath);
+  async updateProfileImage(email: string, file: Express.Multer.File) {
+    const imageUrl = await this.uploadImageToS3(file, 'profile', email);
+    return this.userRepository.updateProfileImage(email, imageUrl);
   }
 
   private static saveImage(
@@ -86,16 +122,12 @@ export default class UserService {
     type: string,
     email: string,
   ): string {
-    const imagePath = path.join(
-      __dirname,
-      '..',
-      'uploads',
-      type,
-      `${email}.jpg`,
-    );
-    fs.ensureDirSync(path.dirname(imagePath));
+    const uploadsDir = path.join(__dirname, '..', '..', 'uploads', type);
+    fs.ensureDirSync(uploadsDir);
+    const imagePath = path.join(uploadsDir, `${email}.jpg`);
     fs.writeFileSync(imagePath, imageBuffer);
-    return imagePath;
+    console.log(imagePath);
+    return path.resolve(imagePath);
   }
 
   async updateUserProfile(email: string, profileDto: UpdateUserDto) {
